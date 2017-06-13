@@ -1,9 +1,37 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace YmlTool
 {
+
+    public class ErrorBackgroudConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var line =(((ListViewItem) value)?.DataContext as TextItem)?.Preline;
+            var errorlines = ((CheckWindowViewModel) parameter)?.Errors;
+            
+            foreach (var el in errorlines)
+            {
+                if (el.Line==line)
+                {
+                    return Brushes.Crimson;
+                }
+            }
+            return Brushes.White;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class ErrorMsgConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

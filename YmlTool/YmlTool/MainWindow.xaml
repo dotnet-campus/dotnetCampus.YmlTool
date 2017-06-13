@@ -10,6 +10,7 @@
     <Window.Resources>
         <local:CheckWindowViewModel x:Key="ViewModel"/>
         <local:ErrorMsgConverter x:Key="ErrorMsgConverter"/>
+        <local:ErrorBackgroudConverter x:Key="BgdConverter"/>
     </Window.Resources>
     <Window.DataContext>
         <Binding Source="{StaticResource  ViewModel}"/>
@@ -51,17 +52,28 @@
           <Grid.RowDefinitions>
               <RowDefinition Height="*"/>
               <RowDefinition Height="4"/>
-              <RowDefinition Height="100"/>
+              <RowDefinition Height="150"/>
           </Grid.RowDefinitions>
           <ContentControl Grid.Row="0" x:Name="ContentControl" Margin="0,2" >
               <ContentControl.ContentTemplate>
                   <DataTemplate>
                       <ContentControl>
                           <ListView x:Name="ItemListView" ItemsSource="{Binding FullText,Source={StaticResource ViewModel}}" VerticalAlignment="Top">
+                              <ListView.ItemContainerStyle>
+                                  <Style  TargetType="{x:Type ListViewItem}">
+                                      <Setter Property="Background">
+                                          <Setter.Value>
+                                              <Binding RelativeSource="{RelativeSource Self}" 
+                                                       Converter="{StaticResource BgdConverter}"
+                                                       ConverterParameter="{StaticResource ViewModel}"/>
+                                          </Setter.Value>
+                                      </Setter>
+                                  </Style>
+                                </ListView.ItemContainerStyle>
                               <ListView.View>
                                   <GridView>
-                                      <GridViewColumn  Width="40" Header="行号"  DisplayMemberBinding="{Binding Preline}"  />
-                                      <GridViewColumn  Width="720" Header="文本" DisplayMemberBinding="{Binding Text}"/>
+                                      <GridViewColumn  Width="40" Header="行号"  DisplayMemberBinding="{Binding Preline}"/>
+                                      <GridViewColumn  Width="720" Header="文本" DisplayMemberBinding="{Binding Text}" />
                                   </GridView>
                               </ListView.View>
                           </ListView>
