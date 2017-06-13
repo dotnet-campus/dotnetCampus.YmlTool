@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 
 namespace YmlTool
 {
@@ -20,9 +21,32 @@ namespace YmlTool
     /// </summary>
     public partial class MainWindow : Window
     {
+        private CheckWindowViewModel _viewModel;
         public MainWindow()
         {
             InitializeComponent();
+
+            InitializeViewModel();
+        }
+
+        private void InitializeViewModel()
+        {
+            _viewModel = (CheckWindowViewModel)Resources["ViewModel"];
+
+        }
+        private void ChooseFile(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new OpenFileDialog() { Filter = "YML文件|*.yml;*.yaml" };
+
+            var result = openFileDialog.ShowDialog();
+
+            if (result == true)
+            {
+                var name = openFileDialog.FileName;
+                _viewModel.YmlSource = name;
+            }
+
+            Application.Current.MainWindow.Focus();
         }
     }
 }

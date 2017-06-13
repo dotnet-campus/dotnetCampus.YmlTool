@@ -17,18 +17,11 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="4"/>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="4"/>
             <RowDefinition Height="*" MinHeight="200"/>
             <RowDefinition Height="4"/>
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="25"/>
-                <RowDefinition Height="4"/>
-                <RowDefinition Height="25"/>
-            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="4"/>
@@ -44,53 +37,12 @@
                 </TextBox.Text>
             </TextBox>
 
-            <TextBox Grid.Row="2" Grid.Column="0" Background="White" VerticalContentAlignment="Center">
-                <TextBox.Text>
-                    <Binding Path="LangSourceDir">
-                        <Binding.ValidationRules>
-                            <local:DirectoryOrFilePathValidation/>
-                        </Binding.ValidationRules>
-                    </Binding>
-                </TextBox.Text>
-            </TextBox>
-            <Button Grid.Row="0" Grid.Column="2" Background="Honeydew " Content="选择语言项路径" />
-            <Button Grid.Row="2" Grid.Column="2" Background="Honeydew " Content="选择语言源路径"/>
+            
+            <Button Grid.Row="0" Grid.Column="2" Background="Honeydew " Content="选择语言项路径" Click="ChooseFile" />
+            
         </Grid>
-        <Grid Grid.Row="2" VerticalAlignment="Center">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="4"/>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="4"/>
-                <ColumnDefinition Width="120"/>
-            </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0">
-                <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" >
-                    <Hyperlink NavigateUri="https://kb.cvte.com/pages/viewpage.action?pageId=52951535" ToolTip="帮助文档" >
-                        帮助文档    
-                    </Hyperlink>
-                </TextBlock>
-            </Grid>
-            <StackPanel HorizontalAlignment="Left" Grid.Column="1">
-                <!--<CheckBox Content="查找静态文本" IsChecked="{Binding CheckMethods,
-                    Converter={StaticResource MethodConverter}, ConverterParameter={StaticResource ViewModel}}"/>-->
-            </StackPanel>
-            <CheckBox Grid.Column="3" Content="是否查找子文件夹" IsChecked="{Binding Path=IsRecursion}"/>
-            <ToggleButton x:Name="ShowToggleButton"  Grid.Column="5" IsChecked="{Binding  IsShowDynamicItems}">
-                <ToggleButton.Resources>
-                    <Style TargetType="{x:Type ToggleButton}">
-                        <Setter Property="Content" Value="不显示动态语言项"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsChecked" Value="False">
-                                <Setter Property="Content" Value="显示动态语言项" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </ToggleButton.Resources>
-            </ToggleButton>
-        </Grid>
-        <ContentControl Grid.Row="3" x:Name="ContentControl" Margin="0,2" Grid.RowSpan="2">
+      
+        <ContentControl Grid.Row="2" x:Name="ContentControl" Margin="0,2" Grid.RowSpan="2">
             <ContentControl.ContentTemplate>
                 <DataTemplate>
                     <ContentControl>
@@ -138,7 +90,7 @@
             </ContentControl.ContentTemplate>
         </ContentControl>
 
-        <Grid Grid.Row="6">
+        <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="*"/>
@@ -146,10 +98,14 @@
                 <ColumnDefinition Width="4"/>
                 <ColumnDefinition Width="80"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{Binding State,Converter={StaticResource StateConverter}}"/>
+            <TextBlock   VerticalAlignment="Center" >
+                <Hyperlink NavigateUri="https://kb.cvte.com/pages/viewpage.action?pageId=52951535" ToolTip="帮助文档" >
+                    帮助文档    
+                </Hyperlink>
+            </TextBlock>
             <Button Grid.Column="2" Background="Honeydew " Content="检索" Command="{Binding CheckFilesCommand}"/>
             <Button Grid.Column="4" Background="Honeydew " Content="比对" Command="{Binding CompareItemsCommand}"/>
-            <ProgressBar Grid.Column="1" Width="500" Background="#FFD6E2D1"  Minimum="0" Maximum="1" Value="{Binding Progress}"/>
+            
         </Grid>
     </Grid>
 </Window>

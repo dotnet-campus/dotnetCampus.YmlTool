@@ -12,7 +12,7 @@ namespace YmlTool
     {
         private double _progress;
 
-        private string _langSourceDir;
+        private string _ymlSource;
         private string _targetDir;
         private Dictionary<string, HashSet<string>> _allLangItems;
         private Dictionary<string, HashSet<string>> _selectedLangItems;
@@ -53,12 +53,12 @@ namespace YmlTool
         /// <summary>
         /// 语言源路径
         /// </summary>
-        public string LangSourceDir
+        public string YmlSource
         {
-            get =>_langSourceDir;
+            get =>_ymlSource;
             set
             {
-                _langSourceDir = value;
+                _ymlSource = value;
                 OnPropertyChanged();
             }
         }
@@ -139,7 +139,7 @@ namespace YmlTool
         private bool CompareItemsCanExecute()
         {
             return (State == CheckWindowState.Checked ||State==CheckWindowState.Compared)&&
-                (File.Exists(LangSourceDir)|| Directory.Exists(LangSourceDir)) ;
+                (File.Exists(YmlSource)|| Directory.Exists(YmlSource)) ;
         }
 
         private void CompareItemsExecute()

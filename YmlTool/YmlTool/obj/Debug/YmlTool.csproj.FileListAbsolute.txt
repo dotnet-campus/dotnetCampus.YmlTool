@@ -15,3 +15,6 @@ F:\OneDrive\ymltool\YmlTool\YmlTool\obj\Debug\YmlTool.Properties.Resources.resou
 F:\OneDrive\ymltool\YmlTool\YmlTool\obj\Debug\YmlTool.csproj.GenerateResource.Cache
 F:\OneDrive\ymltool\YmlTool\YmlTool\obj\Debug\YmlTool.exe
 F:\OneDrive\ymltool\YmlTool\YmlTool\obj\Debug\YmlTool.pdb
+F:\OneDrive\ymltool\YmlTool\YmlTool\bin\Debug\DiffPlex.dll
+F:\OneDrive\ymltool\YmlTool\YmlTool\bin\Debug\System.Runtime.InteropServices.RuntimeInformation.dll
+F:\OneDrive\ymltool\YmlTool\YmlTool\bin\Debug\DiffPlex.xml
