@@ -53,50 +53,19 @@
               <RowDefinition Height="4"/>
               <RowDefinition Height="100"/>
           </Grid.RowDefinitions>
-          <ContentControl Grid.Row="0" x:Name="ContentControl" Margin="0,2" Grid.RowSpan="2">
+          <ContentControl Grid.Row="0" x:Name="ContentControl" Margin="0,2" >
               <ContentControl.ContentTemplate>
                   <DataTemplate>
                       <ContentControl>
-                          <ListView x:Name="ItemListView" ItemsSource="{Binding AllLangItems, Source={StaticResource ViewModel}}" VerticalAlignment="Top">
+                          <ListView x:Name="ItemListView" ItemsSource="{Binding FullText,Source={StaticResource ViewModel}}" VerticalAlignment="Top">
                               <ListView.View>
                                   <GridView>
-                                      <GridViewColumn  Width="40"  >
-                                          <GridViewColumn.CellTemplate>
-                                              <DataTemplate>
-                                                  <TextBox x:Name="TextBox" Text="{Binding Path=Key, Mode=OneWay }" 
-                                                           Margin="0,5" Width="340" Background="{x:Null}" BorderThickness="0"
-                                                  >
-                                                  </TextBox>
-                                              </DataTemplate>
-                                          </GridViewColumn.CellTemplate>
-                                      </GridViewColumn>
-                                      <GridViewColumn  Width="720">
-                                          <GridViewColumn.CellTemplate>
-                                              <DataTemplate>
-                                                  <ListBox ItemsSource="{Binding Value}" Width="785" MinHeight="30"
-                                                           VerticalAlignment="Center">
-                                                      <ListBox.ItemTemplate>
-                                                          <DataTemplate>
-                                                              <TextBox Text="{Binding Mode=OneWay}" Margin="0,5" 
-                                                                       BorderThickness="0" Background="{x:Null}" 
-                                                                       HorizontalAlignment="Left" Width="770"
-                                                              />
-                                                          </DataTemplate>
-                                                      </ListBox.ItemTemplate>
-                                                  </ListBox>
-                                              </DataTemplate>
-                                          </GridViewColumn.CellTemplate>
-                                      </GridViewColumn>
+                                      <GridViewColumn  Width="40" Header="行号"  DisplayMemberBinding="{Binding Preline}"  />
+                                      <GridViewColumn  Width="720" Header="文本" DisplayMemberBinding="{Binding Text}"/>
                                   </GridView>
                               </ListView.View>
                           </ListView>
                       </ContentControl>
-                      <DataTemplate.Triggers>
-                          <DataTrigger Binding="{Binding ElementName=ShowToggleButton,Path=IsChecked}" Value="False">
-                              <Setter TargetName="ItemListView"  Property="ItemsSource" 
-                                      Value="{Binding SelectedLangItems, Source={StaticResource ViewModel}}"/>
-                          </DataTrigger>
-                      </DataTemplate.Triggers>
                   </DataTemplate>
               </ContentControl.ContentTemplate>
           </ContentControl>

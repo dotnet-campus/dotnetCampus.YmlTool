@@ -16,6 +16,7 @@ namespace YmlTool
         private string _ymlSource;
 
         private ObservableCollection<ErrorItem> _errors;
+        private ObservableCollection<TextItem> _fullText;
         private CheckWindowState _state;
         private bool _isShowDynamicItems;
 
@@ -50,10 +51,19 @@ namespace YmlTool
                 OnPropertyChanged();
             }
         }
-      
-        
 
-        
+
+        public ObservableCollection<TextItem> FullText
+        {
+            get => _fullText;
+            set
+            {
+                _fullText = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         /// <summary>
         /// 程序状态
         /// </summary>
@@ -72,7 +82,7 @@ namespace YmlTool
             State = CheckWindowState.Initialing;
 
            
-
+            FullText=new ObservableCollection<TextItem>();
            
             
            
@@ -109,11 +119,7 @@ namespace YmlTool
             
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+        
         private bool CheckFilesCanExecute()
         {
             return  (State==CheckWindowState.Checked||State==CheckWindowState.Ready||State==CheckWindowState.Compared) ;
@@ -126,6 +132,13 @@ namespace YmlTool
                  new FileInfo(YmlSource).Extension == ".yaml" ))
             {
                 State=CheckWindowState.Checking;
+                var i = 1;
+                foreach (var line in File.ReadAllLines(YmlSource))
+                {
+                    FullText.Add(new TextItem(line,i));
+                    i++;
+                } 
+                
                 Errors = YamlParser.Parse(YmlSource, out _headNode);
                 State=CheckWindowState.Checked;
             }
