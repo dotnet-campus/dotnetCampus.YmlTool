@@ -1,10 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Text.RegularExpressions;
+using DiffPlex;
+using DiffPlex.DiffBuilder;
+using DiffPlex.DiffBuilder.Model;
 using JetBrains.Annotations;
 
 namespace YmlTool
@@ -12,11 +18,13 @@ namespace YmlTool
     public class CheckWindowViewModel:INotifyPropertyChanged
     {
 
-        private YamlNode _headNode;
+        private List<string> _newlines;
         private string _ymlSource;
+        private string _temp;
 
         private ObservableCollection<ErrorItem> _errors;
         private ObservableCollection<TextItem> _fullText;
+        private ObservableCollection<TextItem> _diffText;
         private CheckWindowState _state;
         private bool _isShowDynamicItems;
 
@@ -63,6 +71,16 @@ namespace YmlTool
             }
         }
 
+        public ObservableCollection<TextItem> DiffText
+        {
+            get => _diffText;
+            set
+            {
+                _diffText = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         /// <summary>
         /// 程序状态
@@ -83,8 +101,10 @@ namespace YmlTool
 
            
             FullText=new ObservableCollection<TextItem>();
+            DiffText=new ObservableCollection<TextItem>();
+            _temp = Path.GetTempPath();
            
-            
+            State=CheckWindowState.Compared;
            
             CheckFilesCommand = new DelegateCommand(CheckFilesExecute, CheckFilesCanExecute);
             CompareItemsCommand=new DelegateCommand(CompareItemsExecute, CompareItemsCanExecute);
@@ -98,39 +118,87 @@ namespace YmlTool
 
         private bool CompareItemsCanExecute()
         {
-            return (State == CheckWindowState.Checked ||State==CheckWindowState.Compared)&&
-                (File.Exists(YmlSource)|| Directory.Exists(YmlSource)) ;
+            return (State == CheckWindowState.Checked );
         }
 
         private void CompareItemsExecute()
         {
             State=CheckWindowState.Comparing;
 
-            CompareFilesAsync();
+            var filename = _temp + "\\" + Guid.NewGuid() + Path.GetExtension(YmlSource);
+            using (var sw=new StreamWriter(filename))
+            {
+                foreach (var nl in _newlines)
+                {
+                    sw.WriteLine(nl);
+                }
+            }
 
+            DiffFiles(YmlSource, filename);
 
-
+            State = CheckWindowState.Compared;
         }
-        /// <summary>
-        /// 比对文件异步方法
-        /// </summary>
-        private async void  CompareFilesAsync()
+
+        private void DiffFiles(string oldfile, string newfile)
         {
+            DiffText.Clear();
+
+            var temp=new ObservableCollection<TextItem>();
             
+            var d = new Differ();
+            var builder = new InlineDiffBuilder(d);
+            var osr=new StreamReader(oldfile);
+            var nsr=new StreamReader(newfile);
+            //注意大文本内存问题
+            var result = builder.BuildDiffModel(osr.ReadToEnd(),nsr.ReadToEnd());
+            
+            int i = 1, j = 1;
+            foreach (var line in result.Lines)
+            {
+                if (line.Type == ChangeType.Inserted)
+                {
+                    temp.Add(new TextItem(line.Text,-1,j++,true));
+                }
+                else if (line.Type == ChangeType.Deleted)
+                {
+                    temp.Add(new TextItem(line.Text, i++, -1, false));
+                }
+                else if (line.Type == ChangeType.Unchanged)
+                {
+                    temp.Add(new TextItem(line.Text));
+                }
+
+            }
+
+            var r = from textItem in temp
+                where textItem.IsAdd != null
+                select temp.IndexOf(textItem);
+            var lines=new List<int>();
+            foreach (var ri in r)
+            {
+                lines.Add(ri-1);
+                lines.Add(ri);
+                lines.Add(ri + 1);
+            }
+
+            foreach (var line in lines.Distinct())
+            {
+                DiffText.Add(temp[line]);
+            }
+
         }
 
-        
+
         private bool CheckFilesCanExecute()
         {
-            return  (State==CheckWindowState.Checked||State==CheckWindowState.Ready||State==CheckWindowState.Compared) ;
+            return  (State==CheckWindowState.Checked||State==CheckWindowState.Ready||State==CheckWindowState.Compared)
+                &&File.Exists(YmlSource) && (new FileInfo(YmlSource).Extension == ".yml" ||
+                new FileInfo(YmlSource).Extension == ".yaml"); ;
         }
 
         private void CheckFilesExecute()
         {
-            if (File.Exists(YmlSource)&&
-                (new FileInfo(YmlSource).Extension ==".yml"||
-                 new FileInfo(YmlSource).Extension == ".yaml" ))
-            {
+            
                 State=CheckWindowState.Checking;
                 var i = 1;
                 foreach (var line in File.ReadAllLines(YmlSource))
@@ -139,15 +207,10 @@ namespace YmlTool
                     i++;
                 } 
                 
-                Errors = YamlParser.Parse(YmlSource, out _headNode);
+                Errors = YamlParser.Parse(YmlSource, out _newlines);
                 State=CheckWindowState.Checked;
-            }
+           
             
-            
-        }
-
-        private async void SearchFilesAsync()
-        {
             
         }
 

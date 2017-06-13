@@ -95,5 +95,14 @@ namespace YmlTool.Properties {
                 return ResourceManager.GetString("errorMsg0004", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   查找类似 缺少： 的本地化字符串。
+        /// </summary>
+        internal static string errorMsg0005 {
+            get {
+                return ResourceManager.GetString("errorMsg0005", resourceCulture);
+            }
+        }
     }
 }

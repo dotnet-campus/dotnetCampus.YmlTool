@@ -129,4 +129,7 @@
   <data name="errorMsg0004" xml:space="preserve">
     <value>存在重复key</value>
   </data>
+  <data name="errorMsg0005" xml:space="preserve">
+    <value>缺少：</value>
+  </data>
 </root>

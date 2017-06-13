@@ -10,7 +10,9 @@
     <Window.Resources>
         <local:CheckWindowViewModel x:Key="ViewModel"/>
         <local:ErrorMsgConverter x:Key="ErrorMsgConverter"/>
-        <local:ErrorBackgroudConverter x:Key="BgdConverter"/>
+        <local:ErrorBackgroundConverter x:Key="BgdConverter"/>
+        <local:IsAddConverter x:Key="IsAddConverter"/>
+        <local:BackgroundConverter x:Key="Background"/>
     </Window.Resources>
     <Window.DataContext>
         <Binding Source="{StaticResource  ViewModel}"/>
@@ -57,8 +59,8 @@
           <ContentControl Grid.Row="0" x:Name="ContentControl" Margin="0,2" >
               <ContentControl.ContentTemplate>
                   <DataTemplate>
-                      <ContentControl>
-                          <ListView x:Name="ItemListView" ItemsSource="{Binding FullText,Source={StaticResource ViewModel}}" VerticalAlignment="Top">
+                      <ContentControl x:Name="ContentControl">
+                          <ListView  ItemsSource="{Binding FullText,Source={StaticResource ViewModel}}" VerticalAlignment="Top">
                               <ListView.ItemContainerStyle>
                                   <Style  TargetType="{x:Type ListViewItem}">
                                       <Setter Property="Background">
@@ -78,6 +80,35 @@
                               </ListView.View>
                           </ListView>
                       </ContentControl>
+                      <DataTemplate.Triggers>
+                          <DataTrigger Binding="{Binding State}" Value="{x:Static local:CheckWindowState.Compared}">
+                                <Setter TargetName="ContentControl"  Property="Content">
+                                    <Setter.Value>
+                                        <ListView  ItemsSource="{Binding DiffText,Source={StaticResource ViewModel}}" VerticalAlignment="Top">
+                                            <ListView.ItemContainerStyle>
+                                                <Style  TargetType="{x:Type ListViewItem}">
+                                                    <Setter Property="Background">
+                                                        <Setter.Value>
+                                                            <Binding RelativeSource="{RelativeSource Self}" 
+                                                                     Converter="{StaticResource Background}"
+                                                                     ConverterParameter="{StaticResource ViewModel}"/>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </ListView.ItemContainerStyle>
+                                            <ListView.View>
+                                                <GridView>
+                                                    <GridViewColumn  Width="40" Header="旧行号"  DisplayMemberBinding="{Binding Preline}"/>
+                                                    <GridViewColumn  Width="40" Header="新行号"  DisplayMemberBinding="{Binding Postline}"/>
+                                                    <GridViewColumn  Width="40" Header=""  DisplayMemberBinding="{Binding IsAdd,Converter={StaticResource IsAddConverter}}"/>
+                                                    <GridViewColumn  Width="720" Header="文本" DisplayMemberBinding="{Binding Text}" />
+                                                </GridView>
+                                            </ListView.View>
+                                        </ListView>
+                                    </Setter.Value>
+                                </Setter>
+                          </DataTrigger>
+                        </DataTemplate.Triggers>
                   </DataTemplate>
               </ContentControl.ContentTemplate>
           </ContentControl>

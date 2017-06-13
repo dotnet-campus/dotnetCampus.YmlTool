@@ -9,7 +9,43 @@ using System.Windows.Media;
 namespace YmlTool
 {
 
-    public class ErrorBackgroudConverter : IValueConverter
+    public class BackgroundConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var v= (((ListViewItem)value)?.DataContext as TextItem)?.IsAdd;
+            if (v.HasValue)
+            {
+                return v.Value ? Brushes.GreenYellow : Brushes.Crimson;
+            }
+            return Brushes.White;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class IsAddConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var v = (bool?) value;
+            if (v.HasValue)
+            {
+                return v.Value ? "+" : "-";
+            }
+            return " ";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class ErrorBackgroundConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

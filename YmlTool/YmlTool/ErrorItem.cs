@@ -30,6 +30,7 @@ namespace YmlTool
         /// 0002:没有value
         /// 0003:tab缩进
         /// 0004:重复键
+        /// 0005:缺少:
         /// </summary>
         public int ErrorCode
         {
