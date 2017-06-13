@@ -4,11 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:YmlTool"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="600" Width="800">
     <Window.Resources>
         <local:CheckWindowViewModel x:Key="ViewModel"/>
-        <local:CheckWindowStateToStringConverter x:Key="StateConverter"/>
+        <local:ErrorMsgConverter x:Key="ErrorMsgConverter"/>
     </Window.Resources>
     <Window.DataContext>
         <Binding Source="{StaticResource  ViewModel}"/>
@@ -27,68 +28,91 @@
                 <ColumnDefinition Width="4"/>
                 <ColumnDefinition Width="120"/>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Row="0" Grid.Column="0" Background="White" VerticalContentAlignment="Center">
+            <TextBox x:Name="InputTextBox" Grid.Row="0" Grid.Column="0" Background="White" VerticalContentAlignment="Center">
                 <TextBox.Text>
-                    <Binding Path="TargetDir" >
+                    <Binding Path="YmlSource"  >
                         <Binding.ValidationRules>
-                            <local:DirectoryPathValidation/>
+                            <local:FilePathValidation />
                         </Binding.ValidationRules>
                     </Binding>
                 </TextBox.Text>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="LostFocus">
+                        <i:InvokeCommandAction Command="{Binding  CheckFilesCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
             </TextBox>
 
             
-            <Button Grid.Row="0" Grid.Column="2" Background="Honeydew " Content="选择语言项路径" Click="ChooseFile" />
+            <Button x:Name="ChooseFileBtn" Grid.Row="0" Grid.Column="2" Background="Honeydew " Content="选择yml文件" Click="ChooseFile"  />
             
         </Grid>
-      
-        <ContentControl Grid.Row="2" x:Name="ContentControl" Margin="0,2" Grid.RowSpan="2">
-            <ContentControl.ContentTemplate>
-                <DataTemplate>
-                    <ContentControl>
-                        <ListView x:Name="ItemListView" ItemsSource="{Binding AllLangItems, Source={StaticResource ViewModel}}" VerticalAlignment="Top">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="语言项" Width="350"  >
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBox x:Name="TextBox" Text="{Binding Path=Key, Mode=OneWay }" 
-                                                         Margin="0,5" Width="340" Background="{x:Null}" BorderThickness="0"
-                                                        >
-                                                </TextBox>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="路径" Width="800">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <ListBox ItemsSource="{Binding Value}" Width="785" MinHeight="30"
-                                                         VerticalAlignment="Center">
-                                                    <ListBox.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <TextBox Text="{Binding Mode=OneWay}" Margin="0,5" 
-                                                                     BorderThickness="0" Background="{x:Null}" 
-                                                                     HorizontalAlignment="Left" Width="770"
-                                                                     />
-                                                        </DataTemplate>
-                                                    </ListBox.ItemTemplate>
-                                                </ListBox>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                    </ContentControl>
-                    <DataTemplate.Triggers>
-                        <DataTrigger Binding="{Binding ElementName=ShowToggleButton,Path=IsChecked}" Value="False">
-                            <Setter TargetName="ItemListView"  Property="ItemsSource" 
-                                    Value="{Binding SelectedLangItems, Source={StaticResource ViewModel}}"/>
-                        </DataTrigger>
-                    </DataTemplate.Triggers>
-                </DataTemplate>
-            </ContentControl.ContentTemplate>
-        </ContentControl>
+      <Grid Grid.Row="2" >
+          <Grid.RowDefinitions>
+              <RowDefinition Height="*"/>
+              <RowDefinition Height="4"/>
+              <RowDefinition Height="100"/>
+          </Grid.RowDefinitions>
+          <ContentControl Grid.Row="0" x:Name="ContentControl" Margin="0,2" Grid.RowSpan="2">
+              <ContentControl.ContentTemplate>
+                  <DataTemplate>
+                      <ContentControl>
+                          <ListView x:Name="ItemListView" ItemsSource="{Binding AllLangItems, Source={StaticResource ViewModel}}" VerticalAlignment="Top">
+                              <ListView.View>
+                                  <GridView>
+                                      <GridViewColumn  Width="40"  >
+                                          <GridViewColumn.CellTemplate>
+                                              <DataTemplate>
+                                                  <TextBox x:Name="TextBox" Text="{Binding Path=Key, Mode=OneWay }" 
+                                                           Margin="0,5" Width="340" Background="{x:Null}" BorderThickness="0"
+                                                  >
+                                                  </TextBox>
+                                              </DataTemplate>
+                                          </GridViewColumn.CellTemplate>
+                                      </GridViewColumn>
+                                      <GridViewColumn  Width="720">
+                                          <GridViewColumn.CellTemplate>
+                                              <DataTemplate>
+                                                  <ListBox ItemsSource="{Binding Value}" Width="785" MinHeight="30"
+                                                           VerticalAlignment="Center">
+                                                      <ListBox.ItemTemplate>
+                                                          <DataTemplate>
+                                                              <TextBox Text="{Binding Mode=OneWay}" Margin="0,5" 
+                                                                       BorderThickness="0" Background="{x:Null}" 
+                                                                       HorizontalAlignment="Left" Width="770"
+                                                              />
+                                                          </DataTemplate>
+                                                      </ListBox.ItemTemplate>
+                                                  </ListBox>
+                                              </DataTemplate>
+                                          </GridViewColumn.CellTemplate>
+                                      </GridViewColumn>
+                                  </GridView>
+                              </ListView.View>
+                          </ListView>
+                      </ContentControl>
+                      <DataTemplate.Triggers>
+                          <DataTrigger Binding="{Binding ElementName=ShowToggleButton,Path=IsChecked}" Value="False">
+                              <Setter TargetName="ItemListView"  Property="ItemsSource" 
+                                      Value="{Binding SelectedLangItems, Source={StaticResource ViewModel}}"/>
+                          </DataTrigger>
+                      </DataTemplate.Triggers>
+                  </DataTemplate>
+              </ContentControl.ContentTemplate>
+          </ContentControl>
+          <ListView Grid.Row="2" ItemsSource="{Binding Errors}">
+              <ListView.View>
+                  <GridView>
+                      <GridViewColumn Header="错误码" Width="80" DisplayMemberBinding="{Binding ErrorCode}"/>
+                      <GridViewColumn Header="信息" Width="600" DisplayMemberBinding="{Binding ErrorCode,
+                          Converter={StaticResource ErrorMsgConverter}}"/>
+                      <GridViewColumn Header="行号" Width="80" DisplayMemberBinding="{Binding Line}"/>
+                  </GridView>
+                </ListView.View>
+
+          </ListView>
+        </Grid>
+        
 
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>

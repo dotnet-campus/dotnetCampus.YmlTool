@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -14,19 +15,23 @@ namespace YmlTool
     public class YamlParser
     {
         /// <summary>
+        /// 检测获取cvte版本yaml的编写不规范，以及修复后的yaml树
         /// </summary>
-        /// <param name="lines">yaml document as string lines</param>
-        /// <param name="prefix">the prefix of key</param>
-        /// <returns>Key and values, key as concat keys (parentName.childName)</returns>
-        public static Dictionary<string, string> Parse(string[] lines, out Dictionary<string, int> lineNum, string prefix = null)
+        /// <param name="filename"></param>
+        /// <param name="headNode"></param>
+        /// <returns></returns>
+        public static ObservableCollection<ErrorItem> Parse(string filename,out YamlNode headNode)
         {
+            var lines = File.ReadAllLines(filename);
             //如果包含TAB，可以考虑报异常
-            lineNum=new Dictionary<string, int>();
+            
 
             var map = new Dictionary<string, string>();
+            var errorlist = new ObservableCollection<ErrorItem>();//错误项
             var currentNode = new YamlNode(new YamlData(), null);
+            headNode = currentNode;
             int currentSpan = -1;
-            var i = 0;
+            var i = 0;//行号
             foreach (var l in lines)
             {
                 i++;
@@ -43,10 +48,26 @@ namespace YmlTool
                         continue;
                     }
                 }
+                
+               
 
-                var match = Regex.Match(line, "(.*?):\\s*(.*)");
+                var match = Regex.Match(line, "([\\w.]*?):\\s*(.*)");
                 var key = match.Groups[1].Value.Trim();
+                if (key.Equals(string.Empty))//没有键
+                {
+                    errorlist.Add(new ErrorItem(){ErrorCode = 1,Line = i});
+                }
                 var value = match.Groups[2].Value.Trim();
+                
+
+                //开头缩进有tab
+                if (Regex.IsMatch(line, "^\\s*\\t+\\s*"))
+                {
+                    errorlist.Add(new ErrorItem() { ErrorCode = 3, Line = i });
+                }
+                //替换tab
+                Regex.Replace(line, @"\t", "  ");
+
 
                 var span = GetSpan(line);
                 if (span <= currentSpan)
@@ -58,7 +79,11 @@ namespace YmlTool
                     }
                 }
 
-                var node = new YamlNode(new YamlData(key, span, key, value), currentNode);
+                //同一层级统一缩进
+                var newspan = currentNode.Children.Count > 0 ? currentNode.Children[0].Data.Span : span;
+                var node = new YamlNode(new YamlData(key, newspan, key, value,i), currentNode);
+
+
 
                 if (!string.IsNullOrEmpty(node.Parent.Data.Key))
                 {
@@ -74,8 +99,17 @@ namespace YmlTool
                         dataValue = dataValue.Replace("\"", "");
                         dataValue = dataValue.Replace("\\n", "\n");
                     }
-                    map.Add(prefix + node.Data.Key, dataValue );
-                    lineNum.Add(prefix + node.Data.Key,i);
+                    if (map.ContainsKey(node.Data.Key))
+                    {
+                        errorlist.Add(new ErrorItem(){ErrorCode = 0004,Line = i});
+                        
+                    }
+                    else
+                    {
+                        map.Add(node.Data.Key, dataValue);
+                    }
+                    
+
                 }
 
                 currentNode.Children.Add(node);
@@ -86,7 +120,32 @@ namespace YmlTool
                 }
                 
             }
-            return map;
+
+            //遍历获取无值的叶节点
+            currentNode = headNode;
+            var stack=new Stack<YamlNode>();
+            stack.Push(currentNode);
+            while (stack.Count>0)
+            {
+                currentNode = stack.Pop();
+                if (currentNode.Children.Count>0)
+                {
+                    foreach (var c in currentNode.Children)
+                    {
+                        stack.Push(c);
+                    }
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(currentNode.Data.Value) )
+                    {
+                        errorlist.Add(new ErrorItem(){ErrorCode = 2,Line = currentNode.Data.Line});
+                    }
+                }
+                
+            }
+
+            return errorlist;
         }
 
         private static int GetSpan(string line)
@@ -135,18 +194,20 @@ namespace YmlTool
         public int Span { get; set; }
         public string Name { get; set; }
         public string Value { get; set; }
+        public int Line { get; set; }
 
         public YamlData()
         {
             Span = -1;
         }
 
-        public YamlData(string key, int span, string name, string value)
+        public YamlData(string key, int span, string name, string value,int line)
         {
             Key = key;
             Span = span;
             Name = name;
             Value = value;
+            Line = line;
         }
     }
 

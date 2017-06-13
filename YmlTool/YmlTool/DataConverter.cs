@@ -4,7 +4,23 @@ using System.Windows.Data;
 
 namespace YmlTool
 {
-    
+    public class ErrorMsgConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null)
+                return null;
+            var msgKey = $"errorMsg{(int) value:D4}"; 
+
+            return Properties.Resources.ResourceManager.GetString(msgKey);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     /// <summary>
     /// 程序状态枚举和字符串的转换
     /// </summary>

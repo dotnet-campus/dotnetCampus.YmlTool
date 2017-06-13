@@ -36,6 +36,7 @@ namespace YmlTool
         }
         private void ChooseFile(object sender, RoutedEventArgs e)
         {
+            InputTextBox.Focus();//todo:通过失去焦点，使界面发送命令,要改
             var openFileDialog = new OpenFileDialog() { Filter = "YML文件|*.yml;*.yaml" };
 
             var result = openFileDialog.ShowDialog();
@@ -45,7 +46,7 @@ namespace YmlTool
                 var name = openFileDialog.FileName;
                 _viewModel.YmlSource = name;
             }
-
+            ChooseFileBtn.Focus();
             Application.Current.MainWindow.Focus();
         }
     }
