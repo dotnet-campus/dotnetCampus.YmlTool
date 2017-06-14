@@ -8,10 +8,12 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows;
 using DiffPlex;
 using DiffPlex.DiffBuilder;
 using DiffPlex.DiffBuilder.Model;
 using JetBrains.Annotations;
+using Microsoft.Win32;
 
 namespace YmlTool
 {
@@ -20,7 +22,7 @@ namespace YmlTool
 
         private List<string> _newlines;
         private string _ymlSource;
-        private string _temp;
+        private string _tempfile;
 
         private ObservableCollection<ErrorItem> _errors;
         private ObservableCollection<TextItem> _fullText;
@@ -30,6 +32,8 @@ namespace YmlTool
 
         public DelegateCommand CheckFilesCommand { get; }
         public DelegateCommand CompareItemsCommand { get; }
+        public DelegateCommand SaveCommand { get; }
+
 
         /// <summary>
         /// 错误列表    
@@ -102,18 +106,61 @@ namespace YmlTool
            
             FullText=new ObservableCollection<TextItem>();
             DiffText=new ObservableCollection<TextItem>();
-            _temp = Path.GetTempPath();
+            
            
-            State=CheckWindowState.Compared;
+           
            
             CheckFilesCommand = new DelegateCommand(CheckFilesExecute, CheckFilesCanExecute);
             CompareItemsCommand=new DelegateCommand(CompareItemsExecute, CompareItemsCanExecute);
-            
+            SaveCommand =new DelegateCommand(SaveExecute,SaveCanExecute);
 
             State = CheckWindowState.Ready;
+            
 
+
+
+        }
+
+        private void SaveExecute()
+        {
+            
+            var saveFileDialog = new SaveFileDialog()
+            {
+                Filter = "YML文件|*.yml",
+                AddExtension = true,
+                CheckPathExists = true,
+                OverwritePrompt = true,
+                DefaultExt = "yml"
+                
+            };
+            
+            
            
+            var result = saveFileDialog.ShowDialog();
 
+            if (result == true)
+            {
+                var filename = saveFileDialog.FileName;
+                using (var sw=new StreamWriter(filename))
+                {
+                    using (var sr=new StreamReader(_tempfile))
+                    {
+                        while (!sr.EndOfStream)
+                        {
+                            var s = sr.ReadLine();
+                            sw.WriteLine(s);
+                        }
+                    }
+                }
+
+            }
+            
+            Application.Current.MainWindow.Focus();
+        }
+
+        private bool SaveCanExecute()
+        {
+            return State == CheckWindowState.Compared&&File.Exists(_tempfile);
         }
 
         private bool CompareItemsCanExecute()
@@ -125,8 +172,9 @@ namespace YmlTool
         {
             State=CheckWindowState.Comparing;
 
-            var filename = _temp + "\\" + Guid.NewGuid() + Path.GetExtension(YmlSource);
-            using (var sw=new StreamWriter(filename))
+             _tempfile = Path.GetTempPath() + "\\" + Guid.NewGuid() + Path.GetExtension(YmlSource);
+
+            using (var sw=new StreamWriter(_tempfile))
             {
                 foreach (var nl in _newlines)
                 {
@@ -134,7 +182,7 @@ namespace YmlTool
                 }
             }
 
-            DiffFiles(YmlSource, filename);
+            DiffFiles(YmlSource, _tempfile);
 
             State = CheckWindowState.Compared;
         }
@@ -165,7 +213,7 @@ namespace YmlTool
                 }
                 else if (line.Type == ChangeType.Unchanged)
                 {
-                    temp.Add(new TextItem(line.Text));
+                    temp.Add(new TextItem(line.Text,i++,j++));
                 }
 
             }

@@ -133,15 +133,16 @@ namespace YmlTool
                 {
                     if (errorlist.Last().ErrorCode==1)//没有键
                     {
-                        newlist.Add(comment);
+                       if(comment!=string.Empty)
+                            newlist.Add(comment);
                         continue;
                     }
                     
                     
-                    if (errorlist.Last().ErrorCode == 2)//没有值
-                    {
-                        dataValue = "value needed";
-                    }
+                    //if (errorlist.Last().ErrorCode == 2)//没有值
+                    //{
+                    //    dataValue = "value needed";
+                    //}
 
                     if (errorlist.Last().ErrorCode == 4)//重复key
                     {
@@ -149,7 +150,7 @@ namespace YmlTool
                     }
                 }
 
-                var newline = new string(' ',node.Data.Span)+ $"{datakey}: {dataValue}{comment}";
+                var newline = new string(' ',node.Data.Span)+ $"{datakey}: {dataValue} {comment}";
                 newlist.Add(newline);
 
             }

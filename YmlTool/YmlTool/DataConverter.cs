@@ -9,6 +9,24 @@ using System.Windows.Media;
 namespace YmlTool
 {
 
+    public class MinusConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var v = (int) value;
+            if (v==-1)
+            {
+                return " ";
+            }
+            return v.ToString();
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class BackgroundConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
