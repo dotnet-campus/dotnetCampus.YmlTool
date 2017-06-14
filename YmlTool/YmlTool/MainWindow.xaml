@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:YmlTool"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800">
+        Title="视睿yml格式化小工具" Height="600" Width="800">
     <Window.Resources>
         <local:CheckWindowViewModel x:Key="ViewModel"/>
         <local:ErrorMsgConverter x:Key="ErrorMsgConverter"/>
@@ -139,7 +139,7 @@
                 <ColumnDefinition Width="80"/>
             </Grid.ColumnDefinitions>
             <TextBlock   VerticalAlignment="Center" >
-                <Hyperlink NavigateUri="https://kb.cvte.com/pages/viewpage.action?pageId=52951535" ToolTip="帮助文档" >
+                <Hyperlink NavigateUri="https://kb.cvte.com/pages/viewpage.action?pageId=53973566" ToolTip="帮助文档" Click="Hyperlink_OnClick" >
                     帮助文档    
                 </Hyperlink>
             </TextBlock>
