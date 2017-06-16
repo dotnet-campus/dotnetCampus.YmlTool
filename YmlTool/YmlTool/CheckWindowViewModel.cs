@@ -224,9 +224,18 @@ namespace YmlTool
             var lines=new List<int>();
             foreach (var ri in r)
             {
-                lines.Add(ri-1);
-                lines.Add(ri);
-                lines.Add(ri + 1);
+                if (ri > 0)
+                {
+                    lines.Add(ri - 1);
+                    lines.Add(ri);
+                    lines.Add(ri + 1);
+                }
+                else
+                {
+                    lines.Add(ri);
+                    lines.Add(ri + 1);
+                }
+                
             }
 
             foreach (var line in lines.Distinct())
