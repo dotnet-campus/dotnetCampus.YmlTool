@@ -240,7 +240,7 @@ namespace YmlTool
 
             foreach (var line in lines.Distinct())
             {
-                DiffText.Add(temp[line]);
+                DiffText.Add(temp[line-1]);
             }
 
         }
