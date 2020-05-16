@@ -4,17 +4,17 @@ using System.Windows.Controls;
 
 namespace YmlTool
 {
-    public class FilePathValidation:ValidationRule
+    public class FilePathValidation : ValidationRule
     {
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
             var dir = value?.ToString();
             if (File.Exists(dir))
             {
-                return new ValidationResult(true,null);
+                return new ValidationResult(true, null);
             }
 
-            return new ValidationResult(false,"Invalid File Path ");
+            return new ValidationResult(false, "Invalid File Path ");
         }
     }
 
@@ -37,7 +37,7 @@ namespace YmlTool
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
             var dir = value?.ToString();
-            if (File.Exists(dir)||Directory.Exists(dir))
+            if (File.Exists(dir) || Directory.Exists(dir))
             {
                 return new ValidationResult(true, null);
             }

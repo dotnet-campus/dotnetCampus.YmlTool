@@ -1,23 +1,22 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using YmlTool.Properties;
 
 namespace YmlTool
 {
-
     public class MinusConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var v = (int) value;
-            if (v==-1)
+            if (v == -1)
             {
                 return " ";
             }
+
             return v.ToString();
         }
 
@@ -31,11 +30,12 @@ namespace YmlTool
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var v= (((ListViewItem)value)?.DataContext as TextItem)?.IsAdd;
+            var v = (((ListViewItem) value)?.DataContext as TextItem)?.IsAdd;
             if (v.HasValue)
             {
                 return v.Value ? Brushes.GreenYellow : Brushes.Crimson;
             }
+
             return Brushes.White;
         }
 
@@ -54,6 +54,7 @@ namespace YmlTool
             {
                 return v.Value ? "+" : "-";
             }
+
             return " ";
         }
 
@@ -67,16 +68,17 @@ namespace YmlTool
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var line =(((ListViewItem) value)?.DataContext as TextItem)?.Preline;
+            var line = (((ListViewItem) value)?.DataContext as TextItem)?.Preline;
             var errorlines = ((CheckWindowViewModel) parameter)?.Errors;
-            
+
             foreach (var el in errorlines)
             {
-                if (el.Line==line)
+                if (el.Line == line)
                 {
                     return Brushes.Crimson;
                 }
             }
+
             return Brushes.White;
         }
 
@@ -91,10 +93,13 @@ namespace YmlTool
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
+            {
                 return null;
-            var msgKey = $"errorMsg{(int) value:D4}"; 
+            }
 
-            return Properties.Resources.ResourceManager.GetString(msgKey);
+            var msgKey = $"errorMsg{(int) value:D4}";
+
+            return Resources.ResourceManager.GetString(msgKey);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -111,11 +116,15 @@ namespace YmlTool
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
+            {
                 return null;
-            var state= ((CheckWindowState)value).ToString();
+            }
 
-            return Properties.Resources.ResourceManager.GetString(state);
+            var state = ((CheckWindowState) value).ToString();
+
+            return Resources.ResourceManager.GetString(state);
         }
+
         /// <summary>
         /// 不使用
         /// </summary>

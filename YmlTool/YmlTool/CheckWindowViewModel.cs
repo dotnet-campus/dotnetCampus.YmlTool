@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows;
 using DiffPlex;
 using DiffPlex.DiffBuilder;
@@ -17,18 +14,23 @@ using Microsoft.Win32;
 
 namespace YmlTool
 {
-    public class CheckWindowViewModel:INotifyPropertyChanged
+    public class CheckWindowViewModel : INotifyPropertyChanged
     {
+        public CheckWindowViewModel()
+        {
+            State = CheckWindowState.Initialing;
 
-        private List<string> _newlines;
-        private string _ymlSource;
-        private string _tempfile;
 
-        private ObservableCollection<ErrorItem> _errors;
-        private ObservableCollection<TextItem> _fullText;
-        private ObservableCollection<TextItem> _diffText;
-        private CheckWindowState _state;
-        private bool _isShowDynamicItems;
+            FullText = new ObservableCollection<TextItem>();
+            DiffText = new ObservableCollection<TextItem>();
+
+
+            CheckFilesCommand = new DelegateCommand(CheckFilesExecute, CheckFilesCanExecute);
+            CompareItemsCommand = new DelegateCommand(CompareItemsExecute, CompareItemsCanExecute);
+            SaveCommand = new DelegateCommand(SaveExecute, SaveCanExecute);
+
+            State = CheckWindowState.Ready;
+        }
 
         public DelegateCommand CheckFilesCommand { get; }
         public DelegateCommand CompareItemsCommand { get; }
@@ -49,14 +51,12 @@ namespace YmlTool
         }
 
 
-
-
         /// <summary>
         /// 语言源路径
         /// </summary>
         public string YmlSource
         {
-            get =>_ymlSource;
+            get => _ymlSource;
             set
             {
                 _ymlSource = value;
@@ -98,52 +98,39 @@ namespace YmlTool
                 OnPropertyChanged();
             }
         }
-        
-        public CheckWindowViewModel()
-        {
-            State = CheckWindowState.Initialing;
 
-           
-            FullText=new ObservableCollection<TextItem>();
-            DiffText=new ObservableCollection<TextItem>();
-            
-           
-           
-           
-            CheckFilesCommand = new DelegateCommand(CheckFilesExecute, CheckFilesCanExecute);
-            CompareItemsCommand=new DelegateCommand(CompareItemsExecute, CompareItemsCanExecute);
-            SaveCommand =new DelegateCommand(SaveExecute,SaveCanExecute);
+        public event PropertyChangedEventHandler PropertyChanged;
+        private ObservableCollection<TextItem> _diffText;
 
-            State = CheckWindowState.Ready;
-            
+        private ObservableCollection<ErrorItem> _errors;
+        private ObservableCollection<TextItem> _fullText;
+        private bool _isShowDynamicItems;
 
-
-
-        }
+        private List<string> _newlines;
+        private CheckWindowState _state;
+        private string _tempfile;
+        private string _ymlSource;
 
         private void SaveExecute()
         {
-            
-            var saveFileDialog = new SaveFileDialog()
+            var saveFileDialog = new SaveFileDialog
             {
                 Filter = "YML文件|*.yml",
                 AddExtension = true,
                 CheckPathExists = true,
                 OverwritePrompt = true,
                 DefaultExt = "yml"
-                
             };
-            
-            
-           
+
+
             var result = saveFileDialog.ShowDialog();
 
             if (result == true)
             {
                 var filename = saveFileDialog.FileName;
-                using (var sw=new StreamWriter(filename))
+                using (var sw = new StreamWriter(filename))
                 {
-                    using (var sr=new StreamReader(_tempfile))
+                    using (var sr = new StreamReader(_tempfile))
                     {
                         while (!sr.EndOfStream)
                         {
@@ -152,29 +139,28 @@ namespace YmlTool
                         }
                     }
                 }
-
             }
-            
+
             Application.Current.MainWindow.Focus();
         }
 
         private bool SaveCanExecute()
         {
-            return State == CheckWindowState.Compared&&File.Exists(_tempfile);
+            return State == CheckWindowState.Compared && File.Exists(_tempfile);
         }
 
         private bool CompareItemsCanExecute()
         {
-            return (State == CheckWindowState.Checked );
+            return (State == CheckWindowState.Checked);
         }
 
         private void CompareItemsExecute()
         {
-            State=CheckWindowState.Comparing;
+            State = CheckWindowState.Comparing;
 
-             _tempfile = Path.GetTempPath() + "\\" + Guid.NewGuid() + Path.GetExtension(YmlSource);
+            _tempfile = Path.GetTempPath() + "\\" + Guid.NewGuid() + Path.GetExtension(YmlSource);
 
-            using (var sw=new StreamWriter(_tempfile))
+            using (var sw = new StreamWriter(_tempfile))
             {
                 foreach (var nl in _newlines)
                 {
@@ -191,21 +177,21 @@ namespace YmlTool
         {
             DiffText.Clear();
 
-            var temp=new ObservableCollection<TextItem>();
-            
+            var temp = new ObservableCollection<TextItem>();
+
             var d = new Differ();
             var builder = new InlineDiffBuilder(d);
-            var osr=new StreamReader(oldfile);
-            var nsr=new StreamReader(newfile);
+            var osr = new StreamReader(oldfile);
+            var nsr = new StreamReader(newfile);
             //注意大文本内存问题
-            var result = builder.BuildDiffModel(osr.ReadToEnd(),nsr.ReadToEnd());
-            
+            var result = builder.BuildDiffModel(osr.ReadToEnd(), nsr.ReadToEnd());
+
             int i = 1, j = 1;
             foreach (var line in result.Lines)
             {
                 if (line.Type == ChangeType.Inserted)
                 {
-                    temp.Add(new TextItem(line.Text,-1,j++,true));
+                    temp.Add(new TextItem(line.Text, -1, j++, true));
                 }
                 else if (line.Type == ChangeType.Deleted)
                 {
@@ -213,15 +199,14 @@ namespace YmlTool
                 }
                 else if (line.Type == ChangeType.Unchanged)
                 {
-                    temp.Add(new TextItem(line.Text,i++,j++));
+                    temp.Add(new TextItem(line.Text, i++, j++));
                 }
-
             }
 
             var r = from textItem in temp
                 where textItem.IsAdd != null
                 select temp.IndexOf(textItem);
-            var lines=new List<int>();
+            var lines = new List<int>();
             foreach (var ri in r)
             {
                 if (ri > 0)
@@ -235,43 +220,37 @@ namespace YmlTool
                     lines.Add(ri);
                     lines.Add(ri + 1);
                 }
-                
             }
 
             foreach (var line in lines.Distinct())
             {
-                DiffText.Add(temp[line-1]);
+                DiffText.Add(temp[line - 1]);
             }
-
         }
 
 
         private bool CheckFilesCanExecute()
         {
-            return  (State==CheckWindowState.Checked||State==CheckWindowState.Ready||State==CheckWindowState.Compared)
-                &&File.Exists(YmlSource) && (new FileInfo(YmlSource).Extension == ".yml" ||
-                new FileInfo(YmlSource).Extension == ".yaml"); ;
+            return (State == CheckWindowState.Checked || State == CheckWindowState.Ready ||
+                    State == CheckWindowState.Compared)
+                   && File.Exists(YmlSource) && (new FileInfo(YmlSource).Extension == ".yml" ||
+                                                 new FileInfo(YmlSource).Extension == ".yaml");
+            ;
         }
 
         private void CheckFilesExecute()
         {
-            
-                State=CheckWindowState.Checking;
-                var i = 1;
-                foreach (var line in File.ReadAllLines(YmlSource))
-                {
-                    FullText.Add(new TextItem(line,i));
-                    i++;
-                } 
-                
-                Errors = YamlParser.Parse(YmlSource, out _newlines);
-                State=CheckWindowState.Checked;
-           
-            
-            
-        }
+            State = CheckWindowState.Checking;
+            var i = 1;
+            foreach (var line in File.ReadAllLines(YmlSource))
+            {
+                FullText.Add(new TextItem(line, i));
+                i++;
+            }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+            Errors = YamlParser.Parse(YmlSource, out _newlines);
+            State = CheckWindowState.Checked;
+        }
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

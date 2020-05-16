@@ -10,9 +10,6 @@
         Checking,
         Checked,
         Comparing,
-        Compared,
+        Compared
     }
-    
-
-   
 }

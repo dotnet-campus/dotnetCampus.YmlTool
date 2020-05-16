@@ -1,18 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Microsoft.Win32;
 
 namespace YmlTool
@@ -22,7 +10,6 @@ namespace YmlTool
     /// </summary>
     public partial class MainWindow : Window
     {
-        private CheckWindowViewModel _viewModel;
         public MainWindow()
         {
             InitializeComponent();
@@ -30,15 +17,17 @@ namespace YmlTool
             InitializeViewModel();
         }
 
+        private CheckWindowViewModel _viewModel;
+
         private void InitializeViewModel()
         {
-            _viewModel = (CheckWindowViewModel)Resources["ViewModel"];
-
+            _viewModel = (CheckWindowViewModel) Resources["ViewModel"];
         }
+
         private void ChooseFile(object sender, RoutedEventArgs e)
         {
-            InputTextBox.Focus();//todo:通过失去焦点，使界面发送命令,要改
-            var openFileDialog = new OpenFileDialog() { Filter = "YML文件|*.yml;*.yaml" };
+            InputTextBox.Focus(); //todo:通过失去焦点，使界面发送命令,要改
+            var openFileDialog = new OpenFileDialog { Filter = "YML文件|*.yml;*.yaml" };
 
             var result = openFileDialog.ShowDialog();
 
@@ -47,13 +36,14 @@ namespace YmlTool
                 var name = openFileDialog.FileName;
                 _viewModel.YmlSource = name;
             }
+
             ChooseFileBtn.Focus();
             Application.Current.MainWindow.Focus();
         }
 
         private void Hyperlink_OnClick(object sender, RoutedEventArgs e)
         {
-            Hyperlink link = sender as Hyperlink;
+            var link = sender as Hyperlink;
             Process.Start(new ProcessStartInfo(link.NavigateUri.AbsoluteUri));
         }
     }

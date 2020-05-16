@@ -8,53 +8,56 @@
         mc:Ignorable="d"
         Title="视睿yml格式化小工具" Height="600" Width="800">
     <Window.Resources>
-        <local:CheckWindowViewModel x:Key="ViewModel"/>
-        <local:ErrorMsgConverter x:Key="ErrorMsgConverter"/>
-        <local:ErrorBackgroundConverter x:Key="BgdConverter"/>
-        <local:IsAddConverter x:Key="IsAddConverter"/>
-        <local:BackgroundConverter x:Key="Background"/>
-        <local:MinusConverter x:Key="MinusConverter"/>
+        <local:CheckWindowViewModel x:Key="ViewModel" />
+        <local:ErrorMsgConverter x:Key="ErrorMsgConverter" />
+        <local:ErrorBackgroundConverter x:Key="BgdConverter" />
+        <local:IsAddConverter x:Key="IsAddConverter" />
+        <local:BackgroundConverter x:Key="Background" />
+        <local:MinusConverter x:Key="MinusConverter" />
         <DataTemplate x:Key="CompareTemplate">
-            <ListView  ItemsSource="{Binding DiffText,Source={StaticResource ViewModel}}" VerticalAlignment="Top">
+            <ListView ItemsSource="{Binding DiffText,Source={StaticResource ViewModel}}" VerticalAlignment="Top">
                 <ListView.ItemContainerStyle>
-                    <Style  TargetType="{x:Type ListViewItem}">
+                    <Style TargetType="{x:Type ListViewItem}">
                         <Setter Property="Background">
                             <Setter.Value>
-                                <Binding RelativeSource="{RelativeSource Self}" 
+                                <Binding RelativeSource="{RelativeSource Self}"
                                          Converter="{StaticResource Background}"
-                                         ConverterParameter="{StaticResource ViewModel}"/>
+                                         ConverterParameter="{StaticResource ViewModel}" />
                             </Setter.Value>
                         </Setter>
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn  Width="40" Header="旧行号"  DisplayMemberBinding="{Binding Preline, Converter={StaticResource MinusConverter}}"/>
-                        <GridViewColumn  Width="40" Header="新行号"  DisplayMemberBinding="{Binding Postline, Converter={StaticResource MinusConverter}}"/>
-                        <GridViewColumn  Width="40" Header=""  DisplayMemberBinding="{Binding IsAdd,Converter={StaticResource IsAddConverter}}"/>
-                        <GridViewColumn  Width="720" Header="文本" DisplayMemberBinding="{Binding Text}" />
+                        <GridViewColumn Width="40" Header="旧行号"
+                                        DisplayMemberBinding="{Binding Preline, Converter={StaticResource MinusConverter}}" />
+                        <GridViewColumn Width="40" Header="新行号"
+                                        DisplayMemberBinding="{Binding Postline, Converter={StaticResource MinusConverter}}" />
+                        <GridViewColumn Width="40" Header=""
+                                        DisplayMemberBinding="{Binding IsAdd,Converter={StaticResource IsAddConverter}}" />
+                        <GridViewColumn Width="720" Header="文本" DisplayMemberBinding="{Binding Text}" />
                     </GridView>
                 </ListView.View>
             </ListView>
         </DataTemplate>
         <DataTemplate x:Key="CheckTemplate">
             <ContentControl x:Name="ContentControl">
-                <ListView  ItemsSource="{Binding FullText,Source={StaticResource ViewModel}}" VerticalAlignment="Top">
+                <ListView ItemsSource="{Binding FullText,Source={StaticResource ViewModel}}" VerticalAlignment="Top">
                     <ListView.ItemContainerStyle>
-                        <Style  TargetType="{x:Type ListViewItem}">
+                        <Style TargetType="{x:Type ListViewItem}">
                             <Setter Property="Background">
                                 <Setter.Value>
-                                    <Binding RelativeSource="{RelativeSource Self}" 
+                                    <Binding RelativeSource="{RelativeSource Self}"
                                              Converter="{StaticResource BgdConverter}"
-                                             ConverterParameter="{StaticResource ViewModel}"/>
+                                             ConverterParameter="{StaticResource ViewModel}" />
                                 </Setter.Value>
                             </Setter>
                         </Style>
                     </ListView.ItemContainerStyle>
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn  Width="40" Header="行号"  DisplayMemberBinding="{Binding Preline}"/>
-                            <GridViewColumn  Width="720" Header="文本" DisplayMemberBinding="{Binding Text}" />
+                            <GridViewColumn Width="40" Header="行号" DisplayMemberBinding="{Binding Preline}" />
+                            <GridViewColumn Width="720" Header="文本" DisplayMemberBinding="{Binding Text}" />
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -62,25 +65,26 @@
         </DataTemplate>
     </Window.Resources>
     <Window.DataContext>
-        <Binding Source="{StaticResource  ViewModel}"/>
+        <Binding Source="{StaticResource  ViewModel}" />
     </Window.DataContext>
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="4"/>
-            <RowDefinition Height="*" MinHeight="200"/>
-            <RowDefinition Height="4"/>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="4" />
+            <RowDefinition Height="*" MinHeight="200" />
+            <RowDefinition Height="4" />
+            <RowDefinition Height="25" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="4"/>
-                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="4" />
+                <ColumnDefinition Width="120" />
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="InputTextBox" Grid.Row="0" Grid.Column="0" Background="White" VerticalContentAlignment="Center">
+            <TextBox x:Name="InputTextBox" Grid.Row="0" Grid.Column="0" Background="White"
+                     VerticalContentAlignment="Center">
                 <TextBox.Text>
-                    <Binding Path="YmlSource"  >
+                    <Binding Path="YmlSource">
                         <Binding.ValidationRules>
                             <local:FilePathValidation />
                         </Binding.ValidationRules>
@@ -93,72 +97,78 @@
                 </i:Interaction.Triggers>
             </TextBox>
 
-            
-            <Button x:Name="ChooseFileBtn" Grid.Row="0" Grid.Column="2" Background="Honeydew " Content="选择yml文件" Click="ChooseFile"  />
-            
+
+            <Button x:Name="ChooseFileBtn" Grid.Row="0" Grid.Column="2" Background="Honeydew " Content="选择yml文件"
+                    Click="ChooseFile" />
+
         </Grid>
-      <Grid Grid.Row="2" >
-          <Grid.RowDefinitions>
-              <RowDefinition Height="*"/>
-              <RowDefinition Height="4"/>
-              <RowDefinition Height="150"/>
-          </Grid.RowDefinitions>
-          <ContentControl Grid.Row="0"  Margin="0,2" >
-              <ContentControl.ContentTemplate>
-                 <DataTemplate>
-                        <ContentControl x:Name="ContentControl" ContentTemplate="{StaticResource CheckTemplate}"/>
-                      <DataTemplate.Triggers>
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="4" />
+                <RowDefinition Height="150" />
+            </Grid.RowDefinitions>
+            <ContentControl Grid.Row="0" Margin="0,2">
+                <ContentControl.ContentTemplate>
+                    <DataTemplate>
+                        <ContentControl x:Name="ContentControl" ContentTemplate="{StaticResource CheckTemplate}" />
+                        <DataTemplate.Triggers>
                             <!--<DataTrigger Binding="{Binding Istrue,Source={StaticResource ViewModel}}" Value="True">-->
-                            <DataTrigger Binding="{Binding State,Source={StaticResource ViewModel}}" Value="{x:Static local:CheckWindowState.Compared}">
-                                <Setter TargetName="ContentControl"  Property="ContentTemplate" Value="{StaticResource CompareTemplate}"/>
-                          </DataTrigger>
+                            <DataTrigger Binding="{Binding State,Source={StaticResource ViewModel}}"
+                                         Value="{x:Static local:CheckWindowState.Compared}">
+                                <Setter TargetName="ContentControl" Property="ContentTemplate"
+                                        Value="{StaticResource CompareTemplate}" />
+                            </DataTrigger>
                         </DataTemplate.Triggers>
-                  </DataTemplate>
-              </ContentControl.ContentTemplate>
-          </ContentControl>
-          <ListView Grid.Row="2" ItemsSource="{Binding Errors}">
-              <ListView.View>
-                  <GridView>
-                      <GridViewColumn Header="错误码" Width="80" DisplayMemberBinding="{Binding ErrorCode}"/>
-                      <GridViewColumn Header="信息" Width="600" DisplayMemberBinding="{Binding ErrorCode,
-                          Converter={StaticResource ErrorMsgConverter}}"/>
-                      <GridViewColumn Header="行号" Width="80" DisplayMemberBinding="{Binding Line}"/>
-                  </GridView>
+                    </DataTemplate>
+                </ContentControl.ContentTemplate>
+            </ContentControl>
+            <ListView Grid.Row="2" ItemsSource="{Binding Errors}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="错误码" Width="80" DisplayMemberBinding="{Binding ErrorCode}" />
+                        <GridViewColumn Header="信息" Width="600"
+                                        DisplayMemberBinding="{Binding ErrorCode,
+                          Converter={StaticResource ErrorMsgConverter}}" />
+                        <GridViewColumn Header="行号" Width="80" DisplayMemberBinding="{Binding Line}" />
+                    </GridView>
                 </ListView.View>
 
-          </ListView>
+            </ListView>
         </Grid>
-        
+
 
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="150"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="80"/>
-                <ColumnDefinition Width="4"/>
-                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="4" />
+                <ColumnDefinition Width="80" />
             </Grid.ColumnDefinitions>
-            <TextBlock   VerticalAlignment="Center" >
-                <Hyperlink NavigateUri="https://kb.cvte.com/pages/viewpage.action?pageId=53973566" ToolTip="帮助文档" Click="Hyperlink_OnClick" >
-                    帮助文档    
+            <TextBlock VerticalAlignment="Center">
+                <Hyperlink NavigateUri="https://kb.cvte.com/pages/viewpage.action?pageId=53973566" ToolTip="帮助文档"
+                           Click="Hyperlink_OnClick">
+                    帮助文档
                 </Hyperlink>
             </TextBlock>
             <Button Grid.Column="2" Background="Honeydew ">
                 <Button.Resources>
                     <Style TargetType="Button">
-                        <Setter Property="Content" Value="一键格式化"/>
+                        <Setter Property="Content" Value="一键格式化" />
                         <Setter Property="Command" Value="{Binding CompareItemsCommand}" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding State,Source={StaticResource ViewModel}}" Value="{x:Static local:CheckWindowState.Compared}">
-                                <Setter Property="Content" Value="撤销"/>
-                                <Setter Property="Command" Value="{Binding CheckFilesCommand}"/>
+                            <DataTrigger Binding="{Binding State,Source={StaticResource ViewModel}}"
+                                         Value="{x:Static local:CheckWindowState.Compared}">
+                                <Setter Property="Content" Value="撤销" />
+                                <Setter Property="Command" Value="{Binding CheckFilesCommand}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </Button.Resources>
             </Button>
-                <Button Grid.Column="4" Background="Honeydew " Content="保存" Command="{Binding SaveCommand}"/>
-            
+            <Button Grid.Column="4" Background="Honeydew " Content="保存" Command="{Binding SaveCommand}" />
+
         </Grid>
     </Grid>
 </Window>
