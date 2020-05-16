@@ -46,7 +46,7 @@ dotnet tool install -g dotnetCampus.YmlTool
 
 ![](http://image.acmx.xyz/lindexi%2F20205161648467139.jpg)
 
-## 🤝 如何贡献
+## 如何贡献
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/dotnet-campus/dotnetCampus.YmlTool/pulls)
 
