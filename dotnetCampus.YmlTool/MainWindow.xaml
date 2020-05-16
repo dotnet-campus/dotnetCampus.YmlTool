@@ -98,7 +98,7 @@
             </TextBox>
 
 
-            <Button x:Name="ChooseFileButton" Grid.Row="0" Grid.Column="2" Background="Honeydew " Content="选择yml文件"
+            <Button x:Name="ChooseFileButton" Grid.Row="0" Grid.Column="2" Background="Honeydew " Content="选择 YAML 文件"
                     Click="ChooseFile" />
 
         </Grid>
