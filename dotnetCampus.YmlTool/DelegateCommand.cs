@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace YmlTool
+namespace dotnetCampus.YmlTool
 {
     public class DelegateCommand<T> : ICommand
     {

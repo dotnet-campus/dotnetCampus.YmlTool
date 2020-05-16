@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace YmlTool
+namespace dotnetCampus.YmlTool
 {
     /// <summary>
     /// App.xaml 的交互逻辑

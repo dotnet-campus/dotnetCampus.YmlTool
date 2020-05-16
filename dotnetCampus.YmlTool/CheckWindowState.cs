@@ -1,4 +1,4 @@
-﻿namespace YmlTool
+﻿namespace dotnetCampus.YmlTool
 {
     /// <summary>
     /// 程序状态

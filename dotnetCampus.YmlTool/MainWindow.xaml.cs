@@ -1,9 +1,10 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Documents;
 using Microsoft.Win32;
 
-namespace YmlTool
+namespace dotnetCampus.YmlTool
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
@@ -37,14 +38,26 @@ namespace YmlTool
                 _viewModel.YmlSource = name;
             }
 
-            ChooseFileBtn.Focus();
+            ChooseFileButton.Focus();
             Application.Current.MainWindow.Focus();
         }
 
         private void Hyperlink_OnClick(object sender, RoutedEventArgs e)
         {
             var link = sender as Hyperlink;
-            Process.Start(new ProcessStartInfo(link.NavigateUri.AbsoluteUri));
+            try
+            {
+                Process.Start(new ProcessStartInfo(link.NavigateUri.AbsoluteUri));
+            }
+            catch (Exception exception)
+            {
+                
+            }
         }
     }
+}
+
+namespace YmlTool
+{
+
 }

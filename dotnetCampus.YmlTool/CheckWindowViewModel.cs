@@ -12,7 +12,7 @@ using DiffPlex.DiffBuilder.Model;
 using JetBrains.Annotations;
 using Microsoft.Win32;
 
-namespace YmlTool
+namespace dotnetCampus.YmlTool
 {
     public class CheckWindowViewModel : INotifyPropertyChanged
     {

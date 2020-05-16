@@ -2,7 +2,7 @@
 using System.IO;
 using System.Windows.Controls;
 
-namespace YmlTool
+namespace dotnetCampus.YmlTool
 {
     public class FilePathValidation : ValidationRule
     {

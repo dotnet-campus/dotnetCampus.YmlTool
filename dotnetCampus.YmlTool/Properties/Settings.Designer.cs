@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace YmlTool.Properties
+namespace dotnetCampus.YmlTool.Properties
 {
 
 

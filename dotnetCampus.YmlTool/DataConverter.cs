@@ -3,9 +3,9 @@ using System.Globalization;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using YmlTool.Properties;
+using dotnetCampus.YmlTool.Properties;
 
-namespace YmlTool
+namespace dotnetCampus.YmlTool
 {
     public class MinusConverter : IValueConverter
     {

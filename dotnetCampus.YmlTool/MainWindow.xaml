@@ -1,19 +1,20 @@
-﻿<Window x:Class="YmlTool.MainWindow"
+﻿<Window x:Class="dotnetCampus.YmlTool.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:YmlTool"
-        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:ymlTool="clr-namespace:dotnetCampus.YmlTool"
         mc:Ignorable="d"
-        Title="视睿yml格式化小工具" Height="600" Width="800">
+        Title="Yml格式化小工具" Height="600" Width="800">
     <Window.Resources>
-        <local:CheckWindowViewModel x:Key="ViewModel" />
-        <local:ErrorMsgConverter x:Key="ErrorMsgConverter" />
-        <local:ErrorBackgroundConverter x:Key="BgdConverter" />
-        <local:IsAddConverter x:Key="IsAddConverter" />
-        <local:BackgroundConverter x:Key="Background" />
-        <local:MinusConverter x:Key="MinusConverter" />
+        <ymlTool:CheckWindowViewModel x:Key="ViewModel" />
+        <ymlTool:ErrorMsgConverter x:Key="ErrorMsgConverter" />
+        <ymlTool:ErrorBackgroundConverter x:Key="BgdConverter" />
+        <ymlTool:IsAddConverter x:Key="IsAddConverter" />
+        <ymlTool:BackgroundConverter x:Key="Background" />
+        <ymlTool:MinusConverter x:Key="MinusConverter" />
         <DataTemplate x:Key="CompareTemplate">
             <ListView ItemsSource="{Binding DiffText,Source={StaticResource ViewModel}}" VerticalAlignment="Top">
                 <ListView.ItemContainerStyle>
@@ -86,7 +87,7 @@
                 <TextBox.Text>
                     <Binding Path="YmlSource">
                         <Binding.ValidationRules>
-                            <local:FilePathValidation />
+                            <ymlTool:FilePathValidation />
                         </Binding.ValidationRules>
                     </Binding>
                 </TextBox.Text>
@@ -98,7 +99,7 @@
             </TextBox>
 
 
-            <Button x:Name="ChooseFileBtn" Grid.Row="0" Grid.Column="2" Background="Honeydew " Content="选择yml文件"
+            <Button x:Name="ChooseFileButton" Grid.Row="0" Grid.Column="2" Background="Honeydew " Content="选择yml文件"
                     Click="ChooseFile" />
 
         </Grid>
@@ -115,7 +116,7 @@
                         <DataTemplate.Triggers>
                             <!--<DataTrigger Binding="{Binding Istrue,Source={StaticResource ViewModel}}" Value="True">-->
                             <DataTrigger Binding="{Binding State,Source={StaticResource ViewModel}}"
-                                         Value="{x:Static local:CheckWindowState.Compared}">
+                                         Value="{x:Static ymlTool:CheckWindowState.Compared}">
                                 <Setter TargetName="ContentControl" Property="ContentTemplate"
                                         Value="{StaticResource CompareTemplate}" />
                             </DataTrigger>
@@ -147,7 +148,7 @@
                 <ColumnDefinition Width="80" />
             </Grid.ColumnDefinitions>
             <TextBlock VerticalAlignment="Center">
-                <Hyperlink NavigateUri="https://kb.cvte.com/pages/viewpage.action?pageId=53973566" ToolTip="帮助文档"
+                <Hyperlink NavigateUri="" ToolTip="帮助文档"
                            Click="Hyperlink_OnClick">
                     帮助文档
                 </Hyperlink>
@@ -159,7 +160,7 @@
                         <Setter Property="Command" Value="{Binding CompareItemsCommand}" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding State,Source={StaticResource ViewModel}}"
-                                         Value="{x:Static local:CheckWindowState.Compared}">
+                                         Value="{x:Static ymlTool:CheckWindowState.Compared}">
                                 <Setter Property="Content" Value="撤销" />
                                 <Setter Property="Command" Value="{Binding CheckFilesCommand}" />
                             </DataTrigger>

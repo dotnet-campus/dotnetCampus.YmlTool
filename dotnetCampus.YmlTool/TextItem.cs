@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 
-namespace YmlTool
+namespace dotnetCampus.YmlTool
 {
     public class TextItem : INotifyPropertyChanged
     {

@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <UseWPF>true</UseWPF>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>YmlTool</ToolCommandName>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="DiffPlex">
+            <Version>1.4.1</Version>
+        </PackageReference>
+        <PackageReference Include="JetBrains.Annotations">
+            <Version>10.2.1</Version>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf">
+            <Version>1.1.19</Version>
+        </PackageReference>
+    </ItemGroup>
+</Project>
