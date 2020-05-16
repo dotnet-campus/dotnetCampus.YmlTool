@@ -6,7 +6,7 @@ YAML格式化小工具
 |--|--|
 |![](https://github.com/dotnet-campus/dotnetCampus.YmlTool/workflows/.NET%20Core/badge.svg)|[![](https://img.shields.io/nuget/v/dotnetCampus.YmlTool.svg)](https://www.nuget.org/packages/dotnetCampus.YmlTool)|
 
-针对开发人员编写yaml文件中可能出现的错误需要进行软件检验，并提供一键格式化功能
+针对开发人员编写 YAML 文件中可能出现的错误需要进行软件检验，并提供一键格式化功能
 
 工具可实现对用来做多语言的 YAML 文件错误检验，包括：
 
@@ -33,6 +33,8 @@ YAML格式化小工具
 格式化后需要人工修复项目：
 
 - 0002：没有value
+
+此工具为多语言 YAML 文件辅助工具，团队内部使用 YAML 作为多语言文件，在构建的时候通过 [dotnet-campus/dotnetCampus.YamlToCsharp](https://github.com/dotnet-campus/dotnetCampus.YamlToCsharp ) 将 YAML 文件转 C# 代码
 
 ## 安装
 
