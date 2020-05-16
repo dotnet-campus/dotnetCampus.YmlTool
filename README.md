@@ -2,6 +2,10 @@
 
 YAML格式化小工具
 
+| Build | NuGet |
+|--|--|
+|![](https://github.com/dotnet-campus/dotnetCampus.YmlTool/workflows/.NET%20Core/badge.svg)|[![](https://img.shields.io/nuget/v/dotnetCampus.YmlTool.svg)](https://www.nuget.org/packages/dotnetCampus.YmlTool)|
+
 针对开发人员编写yaml文件中可能出现的错误需要进行软件检验，并提供一键格式化功能
 
 工具可实现对EN版本yaml文件错误检验，包括：
