@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:YmlTool"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:ymlTool="clr-namespace:dotnetCampus.YmlTool"
         mc:Ignorable="d"
@@ -148,7 +147,7 @@
                 <ColumnDefinition Width="80" />
             </Grid.ColumnDefinitions>
             <TextBlock VerticalAlignment="Center">
-                <Hyperlink NavigateUri="" ToolTip="帮助文档"
+                <Hyperlink NavigateUri="https://github.com/dotnet-campus/dotnetCampus.YmlTool" ToolTip="帮助文档"
                            Click="Hyperlink_OnClick">
                     帮助文档
                 </Hyperlink>

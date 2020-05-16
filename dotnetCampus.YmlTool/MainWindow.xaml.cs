@@ -22,7 +22,7 @@ namespace dotnetCampus.YmlTool
 
         private void InitializeViewModel()
         {
-            _viewModel = (CheckWindowViewModel) Resources["ViewModel"];
+            _viewModel = (CheckWindowViewModel)Resources["ViewModel"];
         }
 
         private void ChooseFile(object sender, RoutedEventArgs e)
@@ -47,17 +47,12 @@ namespace dotnetCampus.YmlTool
             var link = sender as Hyperlink;
             try
             {
-                Process.Start(new ProcessStartInfo(link.NavigateUri.AbsoluteUri));
+                Process.Start("explorer", link.NavigateUri.AbsoluteUri);
             }
             catch (Exception exception)
             {
-                
+
             }
         }
     }
-}
-
-namespace YmlTool
-{
-
 }

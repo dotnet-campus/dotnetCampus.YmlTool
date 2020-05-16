@@ -9,6 +9,17 @@
     <PropertyGroup>
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>YmlTool</ToolCommandName>
+        <Product>YAML格式化小工具</Product>
+        <Company>dotnet-campus</Company>
+        <Authors>dotnet-campus</Authors>
+        <Version>1.0.3</Version>
+        <Description>YAML格式化小工具
+
+针对开发人员编写yaml文件中可能出现的错误需要进行软件检验，并提供一键格式化功能
+</Description>
+        <RepositoryUrl>https://github.com/dotnet-campus/dotnetCampus.YmlTool</RepositoryUrl>
+        <RepositoryType>https://github.com/dotnet-campus/dotnetCampus.YmlTool</RepositoryType>
+        <PackageTags>git</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>
