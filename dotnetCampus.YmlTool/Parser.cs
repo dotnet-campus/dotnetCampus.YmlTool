@@ -10,7 +10,7 @@ namespace dotnetCampus.YmlTool
     public class YamlParser
     {
         /// <summary>
-        /// 检测获取cvte版本yaml的编写不规范，以及修复后的yaml树
+        /// 检测获取yaml的编写不规范，以及修复后的yaml树
         /// </summary>
         /// <param name="filename"></param>
         /// <param name="newlist"></param>
