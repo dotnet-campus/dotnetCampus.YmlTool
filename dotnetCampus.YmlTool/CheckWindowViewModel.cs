@@ -20,10 +20,8 @@ namespace dotnetCampus.YmlTool
         {
             State = CheckWindowState.Initialing;
 
-
             FullText = new ObservableCollection<TextItem>();
             DiffText = new ObservableCollection<TextItem>();
-
 
             CheckFilesCommand = new DelegateCommand(CheckFilesExecute, CheckFilesCanExecute);
             CompareItemsCommand = new DelegateCommand(CompareItemsExecute, CompareItemsCanExecute);
@@ -35,7 +33,6 @@ namespace dotnetCampus.YmlTool
         public DelegateCommand CheckFilesCommand { get; }
         public DelegateCommand CompareItemsCommand { get; }
         public DelegateCommand SaveCommand { get; }
-
 
         /// <summary>
         /// 错误列表    
@@ -50,7 +47,6 @@ namespace dotnetCampus.YmlTool
             }
         }
 
-
         /// <summary>
         /// 语言源路径
         /// </summary>
@@ -63,7 +59,6 @@ namespace dotnetCampus.YmlTool
                 OnPropertyChanged();
             }
         }
-
 
         public ObservableCollection<TextItem> FullText
         {
@@ -84,7 +79,6 @@ namespace dotnetCampus.YmlTool
                 OnPropertyChanged();
             }
         }
-
 
         /// <summary>
         /// 程序状态
@@ -121,7 +115,6 @@ namespace dotnetCampus.YmlTool
                 OverwritePrompt = true,
                 DefaultExt = "yml"
             };
-
 
             var result = saveFileDialog.ShowDialog();
 
@@ -228,14 +221,12 @@ namespace dotnetCampus.YmlTool
             }
         }
 
-
         private bool CheckFilesCanExecute()
         {
             return (State == CheckWindowState.Checked || State == CheckWindowState.Ready ||
                     State == CheckWindowState.Compared)
                    && File.Exists(YmlSource) && (new FileInfo(YmlSource).Extension == ".yml" ||
                                                  new FileInfo(YmlSource).Extension == ".yaml");
-            ;
         }
 
         private void CheckFilesExecute()
